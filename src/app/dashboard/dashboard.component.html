@@ -1,7 +1,44 @@
+<div>
+  <div>
+    <button (click)="textDetection()">Text Detect</button>
+  </div>
 
+  <div *ngIf="!businessCards || businessCards.length <= 0">
+    <h3>
+      There is no business card in database!
+    </h3>
+  </div>
+  <div *ngIf="businessCards && businessCards.length > 0">
+    <h3>
+      Current business cards in database:
+    </h3>
+    <div *ngFor="let businessCard of businessCards; let i = index">
+      <div>
+        <span>
+          {{ i + 1 }}.
+        </span>
+        <span>
+          {{ businessCard.firstName }},
+        </span>
+        <span>
+          {{ businessCard.lastName }},
+        </span>
+        <span>
+          {{ businessCard.phoneNumber }},
+        </span>
+        <span>
+          {{ businessCard.email }},
+        </span>
+        <span>
+          {{ businessCard.extraText }}
+        </span>
+      </div>
+      <div>
+        image
+      </div>
+    </div>
+  </div>
 
+  
+</div>
 
-
-<p>
-  dashboard works!
-</p>

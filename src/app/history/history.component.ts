@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { DatabaseService } from '../service/database.service';
+
 @Component({
   selector: 'app-history',
   templateUrl: './history.component.html',
@@ -7,9 +9,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HistoryComponent implements OnInit {
 
-  constructor() { }
+  history: string[];
+
+  constructor(private dbService: DatabaseService) {
+
+  }
 
   ngOnInit() {
+    this.dbService.getAllHistory().subscribe(
+      (response) => {
+        console.log('Get history from Firebase successfully!');
+        console.log(response);
+
+        this.history = response;
+      },
+      (error) => {
+        console.log('Failed to get history from Firebase!');
+        console.log(error);
+      }
+    );
   }
 
 }
