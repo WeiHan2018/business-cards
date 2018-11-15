@@ -10,6 +10,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 // import * as firebase from 'firebase';
 import * as firebase from 'firebase/app';
 
+
 @Injectable()
 export class LoginService {
   authState: Observable<{} | null>;

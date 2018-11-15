@@ -5,6 +5,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { HttpClientModule } from '@angular/common/http';
+import { WebcamModule } from 'ngx-webcam';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -20,6 +21,7 @@ import { HistoryComponent } from './history/history.component';
 import { LoginService } from './login/login.service';
 import { CloudVisionService } from './service/cloud-vision.service';
 import { DatabaseService } from './service/database.service';
+import { BusinessCardDetailComponent } from './business-card-detail/business-card-detail.component';
 
 
 
@@ -29,6 +31,7 @@ import { DatabaseService } from './service/database.service';
     LoginComponent,
     DashboardComponent,
     HistoryComponent,
+    BusinessCardDetailComponent,
   ],
   imports: [
     BrowserModule,
@@ -37,9 +40,10 @@ import { DatabaseService } from './service/database.service';
     AngularFireDatabaseModule,
     AngularFireAuthModule,
     HttpClientModule,
+    WebcamModule,
     AppRoutingModule
   ],
-  providers: [LoginService, AuthGuard, CloudVisionService, DatabaseService],
+  providers: [LoginService, AuthGuard, CloudVisionService, DatabaseService, ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

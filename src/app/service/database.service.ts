@@ -33,4 +33,13 @@ export class DatabaseService {
   getAllHistory() {
     return this.userBehaviorHistoryRef.valueChanges();
   }
+
+  isAdminUser(userId: string) {
+    return this.db.object(`admins/${userId}`).valueChanges();
+  }
+  
+  // searchBusinessCardByEmail(email: string) {
+  //   return this.db.list('businessCards', ref => this.db.database.ref('businessCards').orderByChild('email').equalTo(email)).valueChanges();
+  // }
+
 }

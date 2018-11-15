@@ -1,1 +1,9 @@
 /* You can add global styles to this file, and also import other style files */
+
+
+.common-margin {
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 12px;
+  
+}

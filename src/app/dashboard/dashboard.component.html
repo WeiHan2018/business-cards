@@ -1,8 +1,45 @@
 <div>
   <div>
+    <h3>
+      Please input an email address: (you can search business cards by email)
+    </h3>
+    <div>
+      <label>Email: </label>
+      <input type="text" [(ngModel)]="searchConditionEmail">
+      <button (click)="searchByEmail()" class="common-margin">Search</button>
+    </div>
+
+    <div *ngIf="businessCardSearchedByEmail">
+      <app-business-card-detail [businessCard]="businessCardSearchedByEmail" [searchBy]="'by email'"></app-business-card-detail>
+    </div>
+  </div>
+
+  <br>
+  <div>
+    <h3>
+      Web Camera:
+    </h3>
+    <div>
+      <div *ngIf="useCamera">
+          <webcam [height]="360" [width]="480" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="useCamera"></webcam>
+      </div>
+      <button (click)="takeSnapshot()" *ngIf="useCamera">Take A Snapshot</button>
+      <button (click)="toggleWebCamera()">Toggle Camera</button>
+    </div>
+    <div *ngIf="imageTaken">
+      <h3>
+        Image taken from web camera:
+      </h3>
+      <img [src]="webcamImage.imageAsDataUrl" [height]="360" width="480">
+    </div>
+  </div>
+
+  <br>
+  <div>
     <button (click)="textDetection()">Text Detect</button>
   </div>
 
+  <br>
   <div *ngIf="!businessCards || businessCards.length <= 0">
     <h3>
       There is no business card in database!
@@ -17,24 +54,24 @@
         <span>
           {{ i + 1 }}.
         </span>
-        <span>
+        <!--<span>
           {{ businessCard.firstName }},
         </span>
         <span>
           {{ businessCard.lastName }},
-        </span>
+        </span>-->
         <span>
           {{ businessCard.phoneNumber }},
         </span>
         <span>
           {{ businessCard.email }},
         </span>
-        <span>
+        <!--<span>
           {{ businessCard.extraText }}
-        </span>
+        </span>-->
       </div>
       <div>
-        image
+          <img [src]="businessCard.imageUri" [height]="270" [width]="360">
       </div>
     </div>
   </div>

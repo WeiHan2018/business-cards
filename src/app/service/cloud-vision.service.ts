@@ -23,9 +23,10 @@ export class CloudVisionService {
       'requests': [
         {
           'image': {
-            'source': {
+            'content': imageUri
+            /*'source': {
               'imageUri': `${imageUri}`,
-            },
+            },*/
           },
           'features': [
             {
@@ -40,7 +41,8 @@ export class CloudVisionService {
     let apiUrl = `${this.cloudVisionApiBaseUrl}${this.cloudVisionApiKeyParam}`;
 
     return this.http.post(apiUrl, request).pipe(
-      map(response => response['responses'][0]['fullTextAnnotation']['text'])
+      map(response => response['responses'][0]['textAnnotations'])
+      //map(response => response['responses'][0]['fullTextAnnotation']['text'])
     );
 
   }
