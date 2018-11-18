@@ -6,6 +6,7 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 
 import { CloudVisionService } from '../service/cloud-vision.service';
 import { DatabaseService } from '../service/database.service';
+import { LoginService } from '../login/login.service';
 
 import { BusinessCard } from '../business-card';
 
@@ -27,14 +28,25 @@ export class DashboardComponent implements OnInit {
   trigger: Subject<void> = new Subject<void>();
   webcamImage: WebcamImage = null;
 
+  detected: boolean = false;
+  detectedFirstName: string = '';
+  detectedLastName: string = '';
+  detectedEmail: string = '';
+  detectedPhoneNumber: string = '';
+  detectedExtraText: string = '';
+  detectedImageUri: string = '';
+
 
   constructor(
     private cloudVisionService: CloudVisionService,
     private dbService: DatabaseService,
-  ) { }
+    private loginService: LoginService
+  ) {
+    this.imageTaken = true; // only for test
+  }
 
   ngOnInit() {
-    this.dbService.getAllBusinessCards().subscribe(
+    this.loginService.businessCardsRef = this.dbService.getAllBusinessCards().subscribe(
       (results) => {
         console.log('Get all business cards from Firebase successfully!');
         console.log(results);
@@ -52,8 +64,8 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    let imageUri = this.webcamImage.imageAsBase64;
-    //let imageUri = 'https://lh3.googleusercontent.com/-sQsJlPZIPTc/ThwkpQeADtI/AAAAAAAAAuI/MWUH1I_7X0A/w530-h289-n/patrick-bateman-card.png';
+    //let imageUri = this.webcamImage.imageAsBase64;
+    let imageUri = 'https://lh3.googleusercontent.com/-sQsJlPZIPTc/ThwkpQeADtI/AAAAAAAAAuI/MWUH1I_7X0A/w530-h289-n/patrick-bateman-card.png';
     
     // detect text in the image
     this.cloudVisionService.detectTextInImage(imageUri).subscribe(
@@ -62,14 +74,9 @@ export class DashboardComponent implements OnInit {
         console.log(response);
         
         // parse the original text to get a business card object
-        let businessCard = this.getBusinessCardInfo(response);
+        this.getBusinessCardInfo(response);
         
-        // add the business card to Firebase
-        this.addBusinessCardToDB(businessCard);
-
-        // add user behavior for text detection to history
-        let userBehaviorMsg = 'User performed text detection on business card';
-        this.addHistory(userBehaviorMsg);
+        this.detected = true;
       },
       (error) => {
         console.log('Failed to detect text in the image!');
@@ -79,28 +86,55 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  getBusinessCardInfo(imageTexts: any[]): BusinessCard {
-    let businessCard = new BusinessCard();
+  getBusinessCardInfo(imageTexts: any[]) {
     let imageFullText = imageTexts[0].description;
 
     // parse phone number
-    businessCard.phoneNumber = this.parsePhoneNumber(imageFullText);
+    this.detectedPhoneNumber = this.parsePhoneNumber(imageFullText);
     // parse email
-    businessCard.email = this.parseEmail(imageFullText);
+    this.detectedEmail = this.parseEmail(imageFullText);
+    // parse first name
+    this.detectedFirstName = 'Wei1';
+    // parse last name
+    this.detectedLastName = 'Han1';
+    // parse extra text
+    this.detectedExtraText = 'extra text 1';
     // image uri base64
-    businessCard.imageUri = this.webcamImage.imageAsDataUrl;
+    //this.detectedImageUri = this.webcamImage.imageAsDataUrl;
+  }
 
-    // TODO parse first name, last name, email and phone number from original text
-    // dummy...begin
-    businessCard.firstName = 'Wei201';
-    businessCard.lastName = 'Han201';
-    //businessCard.email = 'hanwei200@gmail.com';
-    //businessCard.phoneNumber = '200888888888';
-    businessCard.extraText = 'extra text 201';
-    //businessCard.imageUri = 'Base64 200aaaaaaaaaaaaaaaaaa';
-    // dummy...end
+  addDetectedBusinessCard() {
+    if (this.imageTaken !== true) {
+      return;
+    }
 
-    return businessCard;
+    // copy detected data to business card object
+    let businessCard = new BusinessCard();
+    businessCard.firstName = this.detectedFirstName;
+    businessCard.lastName = this.detectedLastName;
+    businessCard.email = this.detectedEmail;
+    businessCard.phoneNumber = this.detectedPhoneNumber;
+    businessCard.extraText = this.detectedExtraText;
+    businessCard.imageUri = this.detectedImageUri;
+
+    // add the business card to Firebase
+    this.addBusinessCardToDB(businessCard);
+
+    // add user behavior for text detection to history
+    let userBehaviorMsg = 'User performed text detection on business card';
+    this.addHistory(userBehaviorMsg);
+
+    this.imageTaken = false;
+    this.detected = false;
+    this.clearDetectedInfo();
+  }
+
+  clearDetectedInfo() {
+    this.detectedFirstName = '';
+    this.detectedLastName = '';
+    this.detectedEmail = '';
+    this.detectedPhoneNumber = '';
+    this.detectedExtraText = '';
   }
 
   toggleWebCamera() {

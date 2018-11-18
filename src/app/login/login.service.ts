@@ -10,6 +10,7 @@ import { AngularFireDatabase } from '@angular/fire/database';
 // import * as firebase from 'firebase';
 import * as firebase from 'firebase/app';
 
+import { DatabaseService } from '../service/database.service';
 
 @Injectable()
 export class LoginService {
@@ -17,17 +18,25 @@ export class LoginService {
 
   user: Observable<{} | null>;
   userUid: string;
+
+  loggedIn: boolean = false;
+  isAdmin: boolean = false;
+  adminRef: any;
+  //historyRef: any;
+  businessCardsRef: any;
   
   constructor(
     private afAuth: AngularFireAuth,
     private router: Router,
-    private db: AngularFireDatabase
+    private db: AngularFireDatabase,
+    private dbService: DatabaseService
   ) {
 
     this.user = this.afAuth.authState
     .switchMap((user) => {
       if (user) {
         this.userUid = user.uid;
+        
         console.log('SWITCHMAP');
         console.log(user);
         console.log('SWITCHMAP');
@@ -48,6 +57,18 @@ export class LoginService {
   loginWithEmail(email: string, password: string) {
     return this.afAuth.auth.signInWithEmailAndPassword(email, password)
       .then((auth) => {
+        this.loggedIn = true;
+        this.adminRef = this.dbService.isAdminUser(auth.user.uid).subscribe(
+          (result) => {
+            if (result === true) {
+              this.isAdmin = true;
+            } else {
+              this.isAdmin = false;
+            }
+            this.adminRef.unsubscribe();
+          }
+        );
+
         console.log(auth.user.uid);
         const createdAt = firebase.database.ServerValue.TIMESTAMP;
         console.log('CREATED AT');
@@ -77,7 +98,14 @@ export class LoginService {
   }
 
   signOut() {
+    /*if (this.historyRef) {
+      this.historyRef.unsubscribe();
+    }*/
+    if (this.businessCardsRef) {
+      this.businessCardsRef.unsubscribe();
+    }
     this.afAuth.auth.signOut();
     this.router.navigate(['/']);
+    this.loggedIn = false;
   }
 }

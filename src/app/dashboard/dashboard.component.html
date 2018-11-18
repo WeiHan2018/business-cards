@@ -23,20 +23,41 @@
       <div *ngIf="useCamera">
           <webcam [height]="360" [width]="480" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="useCamera"></webcam>
       </div>
-      <button (click)="takeSnapshot()" *ngIf="useCamera">Take A Snapshot</button>
-      <button (click)="toggleWebCamera()">Toggle Camera</button>
+      <button (click)="takeSnapshot()" *ngIf="useCamera" class="detected-margin">Take A Snapshot</button>
+      <button (click)="toggleWebCamera()" class="detected-margin">Toggle Camera</button>
     </div>
-    <div *ngIf="imageTaken">
+    <!--<div *ngIf="imageTaken">
       <h3>
         Image taken from web camera:
       </h3>
       <img [src]="webcamImage.imageAsDataUrl" [height]="360" width="480">
-    </div>
+    </div>-->
   </div>
 
   <br>
   <div>
-    <button (click)="textDetection()">Text Detect</button>
+    <button (click)="textDetection()" [disabled]="!imageTaken" class="detected-margin">Text Detect</button>
+    <button (click)="addDetectedBusinessCard()" [disabled]="!detected" class="detected-margin">Add Detected Business Card</button>
+    <div class="detected-margin">
+      <label>Detected First Name: </label>
+      <input type="text" [(ngModel)]="detectedFirstName" [disabled]="!detected">
+    </div>
+    <div class="detected-margin">
+      <label>Detected Last Name: </label>
+      <input type="text" [(ngModel)]="detectedLastName" [disabled]="!detected">
+    </div>
+    <div class="detected-margin">
+      <label>Detected Email: </label>
+      <input type="text" [(ngModel)]="detectedEmail" [disabled]="!detected">
+    </div>
+    <div class="detected-margin">
+      <label>Detected Phone Number: </label>
+      <input type="text" [(ngModel)]="detectedPhoneNumber" [disabled]="!detected">
+    </div>
+    <div class="detected-margin">
+      <label>Detected Extra Text: </label>
+      <input type="text" [(ngModel)]="detectedExtraText" [disabled]="!detected">
+    </div>
   </div>
 
   <br>

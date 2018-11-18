@@ -37,6 +37,22 @@ export class DatabaseService {
   isAdminUser(userId: string) {
     return this.db.object(`admins/${userId}`).valueChanges();
   }
+
+  /*isAdminUser(userId: string): boolean {
+    let ret: boolean = false;
+
+    this.db.object(`admins/${userId}`).valueChanges().(
+      (result) => {
+        if (result === true) {
+          this.ret = true;
+        } else {
+          return false;
+        }
+      }
+    );
+  }*/
+
+  
   
   // searchBusinessCardByEmail(email: string) {
   //   return this.db.list('businessCards', ref => this.db.database.ref('businessCards').orderByChild('email').equalTo(email)).valueChanges();
