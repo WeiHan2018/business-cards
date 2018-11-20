@@ -1,0 +1,5 @@
+<div class="message-margin">
+  <div *ngIf="msgService.showMessage" [ngClass]="{'info-message': msgService.messageType===1, 'error-message': msgService.messageType===-1}">
+    {{ msgService.message }}
+  </div>
+</div>

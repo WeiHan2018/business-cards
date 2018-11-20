@@ -1,0 +1,13 @@
+.message-margin {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.info-message {
+  color: rgb(13, 202, 13);
+}
+
+.error-message {
+  color: red;
+}

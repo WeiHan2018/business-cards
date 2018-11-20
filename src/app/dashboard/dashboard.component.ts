@@ -8,8 +8,10 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { CloudVisionService } from '../service/cloud-vision.service';
 import { DatabaseService } from '../service/database.service';
 import { LoginService } from '../login/login.service';
+import { MessageService } from '../message/message.service';
 
 import { BusinessCard } from '../business-card';
+
 
 
 @Component({
@@ -42,7 +44,8 @@ export class DashboardComponent implements OnInit {
     private cloudVisionService: CloudVisionService,
     private dbService: DatabaseService,
     private loginService: LoginService,
-    private gtag: Gtag
+    private gtag: Gtag,
+    private msgService: MessageService
   ) {
     this.imageTaken = true; // only for test
   }
@@ -83,10 +86,13 @@ export class DashboardComponent implements OnInit {
         // add user behavior for text detection to history
         let userBehaviorMsg = 'User performed text detection on business card';
         this.addHistory(userBehaviorMsg);
+
+        this.msgService.setMessage('Detected text in the image successfully!', 1);
       },
       (error) => {
         console.log('Failed to detect text in the image!');
         console.log(error);
+        this.msgService.setMessage('Failed to detect text in the image!', -1);
       }
     );
 
@@ -205,12 +211,19 @@ export class DashboardComponent implements OnInit {
 
   searchByEmail() {
     if (this.searchConditionEmail.length === 0) {
+      this.msgService.setMessage('Please input email!', -1);
       return;
     }
 
     this.businessCardSearchedByEmail = this.businessCards.find(businessCard => {
       return businessCard.email === this.searchConditionEmail;
     });
+
+    if (this.businessCardSearchedByEmail) {
+      this.msgService.setMessage('Business card with the input email is found successfully!', 1);
+    } else {
+      this.msgService.setMessage('Business card with the input email is not found!', -1);
+    }
 
     // add user behavior for searching business card by email to history
     let userBehaviorMsg = 'User performed searching business card by email';
@@ -226,10 +239,10 @@ export class DashboardComponent implements OnInit {
   addHistory(userBehaviorMsg: string) {
     this.dbService.addHistory(userBehaviorMsg).then(
       (_) => {
-        console.log(`Added user behavior 'text detection' to history in Firebase successfully!`);       
+        console.log(`Added user behavior to history in Firebase successfully!`);       
       },
       (error) => {
-        console.log(`Failed to add user behavior 'text detection' to history in Firebase!`);
+        console.log(`Failed to add user behavior to history in Firebase!`);
       }
     );
   }
@@ -237,10 +250,12 @@ export class DashboardComponent implements OnInit {
   addBusinessCardToDB(businessCard: BusinessCard) {
     this.dbService.addBusinessCard(businessCard).then(
       (_) => {
-        console.log('Added the business card to Firebase successfully!');      
+        console.log('Added the business card to Firebase successfully!');
+        this.msgService.setMessage('Added the business card to Firebase successfully!', 1);      
       },
       (error) => {
         console.log('Failed to add the business card to Firebase!');
+        this.msgService.setMessage('Failed to add the business card to Firebase!', -1);
       }
     );
   }

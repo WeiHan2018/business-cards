@@ -3,9 +3,11 @@ import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from
 
 import { LoginService} from './login.service';
 import { DatabaseService } from '../service/database.service';
+import { MessageService } from '../message/message.service';
 
 import { Observable } from 'rxjs/Observable';
 import { map, take, tap } from 'rxjs/operators';
+
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -13,7 +15,8 @@ export class AuthGuard implements CanActivate {
   constructor(
     private authService: LoginService, 
     private router: Router,
-    private dbService: DatabaseService
+    private dbService: DatabaseService,
+    private msgService: MessageService,    
   ) {}
 
   canActivate(
@@ -34,6 +37,7 @@ export class AuthGuard implements CanActivate {
         if (!loggedIn) {
           console.log('access denied');
           this.router.navigate(['']);
+          this.msgService.setMessage('Please log in first!', -1);
         } else {
           /*if (state['url'] === '/history') {
             this.dbService.isAdminUser(this.authService.userUid).subscribe(

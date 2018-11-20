@@ -20,11 +20,12 @@ import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HistoryComponent } from './history/history.component';
 import { BusinessCardDetailComponent } from './business-card-detail/business-card-detail.component';
+import { MessageComponent } from './message/message.component';
 
 import { LoginService } from './login/login.service';
 import { CloudVisionService } from './service/cloud-vision.service';
 import { DatabaseService } from './service/database.service';
-
+import { MessageService } from './message/message.service';
 
 
 
@@ -35,6 +36,7 @@ import { DatabaseService } from './service/database.service';
     DashboardComponent,
     HistoryComponent,
     BusinessCardDetailComponent,
+    MessageComponent,
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,15 @@ import { DatabaseService } from './service/database.service';
     AppRoutingModule,
     GtagModule.forRoot({ trackingId: 'UA-128395877-1'/*, trackPageviews: false*/ })
   ],
-  providers: [LoginService, AuthGuard, CloudVisionService, DatabaseService, AuthGuardAdmin],
+  providers: [
+    LoginService, 
+    AuthGuard, 
+    CloudVisionService, 
+    DatabaseService, 
+    AuthGuardAdmin,
+    MessageService,
+    
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
