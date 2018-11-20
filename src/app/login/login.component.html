@@ -1,8 +1,44 @@
-<div>
+<div class="login-margin">
   <h3>
     User Login
   </h3>
 
+  <br>
+  <form (ngSubmit)="onLoginEmail()">
+    <div class="row">
+      <div class="col-md-1">
+        <label for="email" class="label-margin">Email: </label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" class="form-control" id="email" name="email" required [(ngModel)]="email">
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-md-1">
+        <label for="password" class="label-margin">Password: </label>
+      </div>
+      <div class="col-md-3">
+        <input type="password" class="form-control" id="password" name="password" required [(ngModel)]="password">
+      </div>
+    </div>
+
+    <br>
+    <div class="row">
+      <div class="col-md-1">
+        <button type="submit" class="btn btn-success">Log In</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<!--<div class="login-margin">
+  <h3>
+    User Login
+  </h3>
+
+  <br>
   <form (ngSubmit)="onLoginEmail()">
     <div class="form-group">
       <label for="email">Email: </label>
@@ -18,5 +54,5 @@
     <br>
     <button type="submit" class="btn btn-success">Log In</button>
   </form>
-</div>
+</div>-->
 

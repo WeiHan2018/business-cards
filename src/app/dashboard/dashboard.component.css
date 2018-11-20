@@ -1,3 +1,25 @@
+.dashboard-margin {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+.label-margin {
+  margin-top: 5px;
+}
+
+.search-margin {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.search-result-margin {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 20px;
+}
+
+
 .detected-margin {
   margin-left: 5px;
   margin-right: 10px;
@@ -7,3 +29,4 @@
 .extra-text {
   width: 500px;
 }
+

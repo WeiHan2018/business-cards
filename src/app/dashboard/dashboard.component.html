@@ -1,15 +1,23 @@
-<div>
+<div class="dashboard-margin">
+
   <div>
     <h3>
       Please input an email address: (you can search business cards by email)
     </h3>
-    <div>
-      <label>Email: </label>
-      <input type="text" [(ngModel)]="searchConditionEmail">
-      <button (click)="searchByEmail()" class="common-margin">Search</button>
+    <br>
+    <div class="row search-margin">
+      <div class="col-md-0">
+        <label class="label-margin">Email: </label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" class="form-control" [(ngModel)]="searchConditionEmail">
+      </div>
+      <div>
+        <button (click)="searchByEmail()" class="btn btn-primary">Search</button>
+      </div>
     </div>
 
-    <div *ngIf="businessCardSearchedByEmail">
+    <div *ngIf="businessCardSearchedByEmail" class="search-result-margin">
       <app-business-card-detail [businessCard]="businessCardSearchedByEmail" [searchBy]="'by email'"></app-business-card-detail>
     </div>
   </div>
@@ -23,8 +31,8 @@
       <div *ngIf="useCamera">
           <webcam [height]="360" [width]="480" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="useCamera"></webcam>
       </div>
-      <button (click)="takeSnapshot()" *ngIf="useCamera" class="detected-margin">Take A Snapshot</button>
-      <button (click)="toggleWebCamera()" class="detected-margin">Toggle Camera</button>
+      <button (click)="takeSnapshot()" *ngIf="useCamera" class="btn btn-primary detected-margin">Take A Snapshot</button>
+      <button (click)="toggleWebCamera()" class="btn btn-primary detected-margin">Toggle Camera</button>
     </div>
     <!--<div *ngIf="imageTaken">
       <h3>
@@ -36,27 +44,52 @@
 
   <br>
   <div>
-    <button (click)="textDetection()" [disabled]="!imageTaken" class="detected-margin">Text Detect</button>
-    <button (click)="addDetectedBusinessCard()" [disabled]="!detected" class="detected-margin">Add Detected Business Card</button>
-    <div class="detected-margin">
-      <label>Detected First Name: </label>
-      <input type="text" [(ngModel)]="detectedFirstName" [disabled]="!detected">
+    <button (click)="textDetection()" [disabled]="!imageTaken" class="btn btn-primary detected-margin">Text Detect</button>
+    <button (click)="addDetectedBusinessCard()" [disabled]="!detected" class="btn btn-primary detected-margin">Add Detected Business Card</button>
+    
+    <div class="row detected-margin">
+      <div class="col-md-0">
+        <label class="label-margin">Detected First Name: </label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" [(ngModel)]="detectedFirstName" [disabled]="!detected" class="form-control">
+      </div>
     </div>
-    <div class="detected-margin">
-      <label>Detected Last Name: </label>
-      <input type="text" [(ngModel)]="detectedLastName" [disabled]="!detected">
+
+    <div class="row detected-margin">
+      <div class="col-md-0">
+        <label class="label-margin">Detected Last Name: </label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" [(ngModel)]="detectedLastName" [disabled]="!detected" class="form-control">
+      </div>
     </div>
-    <div class="detected-margin">
-      <label>Detected Email: </label>
-      <input type="text" [(ngModel)]="detectedEmail" [disabled]="!detected">
+
+    <div class="row detected-margin">
+      <div class="col-md-0">
+        <label class="label-margin">Detected Email: </label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" [(ngModel)]="detectedEmail" [disabled]="!detected" class="form-control">
+      </div>
     </div>
-    <div class="detected-margin">
-      <label>Detected Phone Number: </label>
-      <input type="text" [(ngModel)]="detectedPhoneNumber" [disabled]="!detected">
+
+    <div class="row detected-margin">
+      <div class="col-md-0">
+        <label class="label-margin">Detected Phone Number: </label>
+      </div>
+      <div class="col-md-3">
+        <input type="text" [(ngModel)]="detectedPhoneNumber" [disabled]="!detected" class="form-control">
+      </div>
     </div>
-    <div class="detected-margin">
-      <label>Detected Extra Text: </label>
-      <input type="text" [(ngModel)]="detectedExtraText" [disabled]="!detected" class="extra-text">
+
+    <div class="row detected-margin">
+      <div class="col-md-0">
+        <label class="label-margin">Detected Extra Text: </label>
+      </div>
+      <div class="col-md-8">
+        <input type="text" [(ngModel)]="detectedExtraText" [disabled]="!detected" class="form-control">
+      </div>
     </div>
   </div>
 

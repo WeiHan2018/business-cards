@@ -1,4 +1,4 @@
-<div>
+<div class="history-margin">
   <div *ngIf="!history || history.length <= 0">
     <h3>
       There is no user behavior history in database!
@@ -8,6 +8,7 @@
     <h3>
       Current user behavior history in database:
     </h3>
+    <br>
     <div *ngFor="let historyItem of history; let i = index">
       <span>
         {{ i + 1 }}.
