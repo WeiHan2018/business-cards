@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {Subject} from 'rxjs/Subject';
 import {Observable} from 'rxjs/Observable';
+import { Gtag } from 'angular-gtag';
 
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 
@@ -40,7 +41,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private cloudVisionService: CloudVisionService,
     private dbService: DatabaseService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private gtag: Gtag
   ) {
     this.imageTaken = true; // only for test
   }
@@ -77,6 +79,10 @@ export class DashboardComponent implements OnInit {
         this.getBusinessCardInfo(response);
         
         this.detected = true;
+
+        // add user behavior for text detection to history
+        let userBehaviorMsg = 'User performed text detection on business card';
+        this.addHistory(userBehaviorMsg);
       },
       (error) => {
         console.log('Failed to detect text in the image!');
@@ -98,9 +104,21 @@ export class DashboardComponent implements OnInit {
     // parse last name
     this.detectedLastName = 'Han1';
     // parse extra text
-    this.detectedExtraText = 'extra text 1';
+    this.detectedExtraText = this.parseExtraText(imageFullText);
     // image uri base64
     //this.detectedImageUri = this.webcamImage.imageAsDataUrl;
+  }
+
+  parseExtraText(imageFullText: string): string {
+    let extraText = imageFullText;
+
+    //extraText = extraText.replace(this.detectedFirstName, '');
+    //extraText = extraText.replace(this.detectedLastName, '');
+    extraText = extraText.replace(this.detectedEmail, '');
+    extraText = extraText.replace(this.detectedPhoneNumber, '');
+    extraText = extraText.replace(/\n/g, '');
+
+    return extraText;
   }
 
   addDetectedBusinessCard() {
@@ -120,9 +138,11 @@ export class DashboardComponent implements OnInit {
     // add the business card to Firebase
     this.addBusinessCardToDB(businessCard);
 
-    // add user behavior for text detection to history
-    let userBehaviorMsg = 'User performed text detection on business card';
+    // add user behavior for adding new business card to history
+    let userBehaviorMsg = 'User performed adding new business card to the Firebase';
     this.addHistory(userBehaviorMsg);
+
+    this.sendEventToGoogleAnalytics();
 
     this.imageTaken = false;
     this.detected = false;
@@ -135,6 +155,13 @@ export class DashboardComponent implements OnInit {
     this.detectedEmail = '';
     this.detectedPhoneNumber = '';
     this.detectedExtraText = '';
+  }
+
+  sendEventToGoogleAnalytics() {
+    this.gtag.event('addnew', {
+      'event_category': 'engagement',
+      'event_label': 'added a new business card to database successfully',
+    });
   }
 
   toggleWebCamera() {
@@ -184,6 +211,10 @@ export class DashboardComponent implements OnInit {
     this.businessCardSearchedByEmail = this.businessCards.find(businessCard => {
       return businessCard.email === this.searchConditionEmail;
     });
+
+    // add user behavior for searching business card by email to history
+    let userBehaviorMsg = 'User performed searching business card by email';
+    this.addHistory(userBehaviorMsg);
 
     /*this.dbService.searchBusinessCardByEmail(this.email).subscribe(
       (results) => {

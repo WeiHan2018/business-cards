@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { LoginService } from './login.service';
 import { Router } from '@angular/router';
+import { Gtag } from 'angular-gtag';
+
+import { LoginService } from './login.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private router: Router,
+    private gtag: Gtag
   ) { }
 
   ngOnInit() {
@@ -42,10 +45,22 @@ export class LoginComponent implements OnInit {
 
   emailLogin(email: string, password: string) {
     this.loginService.loginWithEmail(this.email, this.password)
-        .then(() => this.router.navigate(['/dashboard']))
+        .then(
+          () => {
+            this.sendEventToGoogleAnalytics();
+            this.router.navigate(['/dashboard']);
+          }
+        )
         .catch( error => {
           console.log(error);
           this.router.navigate(['/login']);
         });
+  }
+
+  sendEventToGoogleAnalytics() {
+    this.gtag.event('mylogin', {
+      'event_category': 'engagement',
+      'event_label': 'logged in business card system successfully',
+    });
   }
 }
