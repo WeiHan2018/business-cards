@@ -23,10 +23,10 @@ export class CloudVisionService {
       'requests': [
         {
           'image': {
-            //'content': imageUri
-            'source': {
+            'content': imageUri
+            /*'source': {
               'imageUri': `${imageUri}`,
-            },
+            },*/
           },
           'features': [
             {

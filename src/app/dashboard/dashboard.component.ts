@@ -47,7 +47,7 @@ export class DashboardComponent implements OnInit {
     private gtag: Gtag,
     private msgService: MessageService
   ) {
-    this.imageTaken = true; // only for test
+    //this.imageTaken = true; // only for test
   }
 
   ngOnInit() {
@@ -69,8 +69,8 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    //let imageUri = this.webcamImage.imageAsBase64;
-    let imageUri = 'https://lh3.googleusercontent.com/-sQsJlPZIPTc/ThwkpQeADtI/AAAAAAAAAuI/MWUH1I_7X0A/w530-h289-n/patrick-bateman-card.png';
+    let imageUri = this.webcamImage.imageAsBase64;
+    //let imageUri = 'https://lh3.googleusercontent.com/-sQsJlPZIPTc/ThwkpQeADtI/AAAAAAAAAuI/MWUH1I_7X0A/w530-h289-n/patrick-bateman-card.png';
     
     // detect text in the image
     this.cloudVisionService.detectTextInImage(imageUri).subscribe(
@@ -106,13 +106,13 @@ export class DashboardComponent implements OnInit {
     // parse email
     this.detectedEmail = this.parseEmail(imageFullText);
     // parse first name
-    this.detectedFirstName = 'Wei1';
+    this.detectedFirstName = '';
     // parse last name
-    this.detectedLastName = 'Han1';
+    this.detectedLastName = '';
     // parse extra text
     this.detectedExtraText = this.parseExtraText(imageFullText);
     // image uri base64
-    //this.detectedImageUri = this.webcamImage.imageAsDataUrl;
+    this.detectedImageUri = this.webcamImage.imageAsDataUrl;
   }
 
   parseExtraText(imageFullText: string): string {

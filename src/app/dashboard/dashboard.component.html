@@ -34,12 +34,12 @@
       <button (click)="takeSnapshot()" *ngIf="useCamera" class="btn btn-primary detected-margin">Take A Snapshot</button>
       <button (click)="toggleWebCamera()" class="btn btn-primary detected-margin">Toggle Camera</button>
     </div>
-    <!--<div *ngIf="imageTaken">
+    <div *ngIf="imageTaken">
       <h3>
         Image taken from web camera:
       </h3>
       <img [src]="webcamImage.imageAsDataUrl" [height]="360" width="480">
-    </div>-->
+    </div>
   </div>
 
   <br>
